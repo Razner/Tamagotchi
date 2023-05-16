@@ -9,6 +9,7 @@ public class Tamagotchi {
     private int state; // 0 = oeuf, 1 = bébé, 2 = adulte, 3 = vieillard, 4 = mort
     private int nbPlay = 0; // Nombre de fois que le joueur a joué avec le Tamagotchi durant cette unité de temps
     private int nbEat = 0; // Nombre de fois que le joueur a nourri le Tamagotchi durant cette unité de temps
+    private boolean isSick; // Tamagotchi malade ou non
     private boolean firstDayWithoutEating;
     private boolean secondDayWithoutEating;
     private boolean thirdDayWithoutEating;
@@ -23,6 +24,7 @@ public class Tamagotchi {
         this.secondDayWithoutEating = true;
         this.thirdDayWithoutEating = true;
         this.dirtyEnvironment = false;
+        this.isSick = false; // Le Tamagotchi a une chance sur trois d'être malade
     }
 
     public void passerUniteDeTemps() {
@@ -48,6 +50,15 @@ public class Tamagotchi {
             }
         } else if (state == 3) { // Phase de vieillard
             happiness -= 10; // Le bonheur diminue de 10 à chaque unité de temps
+                if (isSick == Math.random() < 1.0 / 3.0) {
+                    System.out.println("Le Tamagotchi est malade.");
+                    System.out.println("Il faut le soigner !");
+                    heal(); // Appel de la méthode pour soigner le Tamagotchi
+                if (isSick) { // Si le Tamagotchi n'a pas été soigné
+                    state = 0; // Remise à zéro après la mort
+                    System.out.println("Le Tamagotchi est mort parce que tu l'as pas soigné(e) !");
+                }
+            }
             if (age >= 20) { // Le vieillard est mort de vieillesse
                 state = 0; // Remise à zéro après la mort
                 System.out.println("Le Tamagotchi est mort de vieillesse.");
@@ -126,6 +137,30 @@ public class Tamagotchi {
         System.out.println("L'environnement du Tamagotchi est propre.");
     }
 
+    public void heal() {
+            
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Voulez-vous soigner le Tamagotchi ? (1: oui / 2: non)");
+        String choixStr = scanner.nextLine();
+    
+        try {
+            int choix = Integer.parseInt(choixStr);
+    
+            if (choix == 1) {
+                isSick = false; // Le Tamagotchi est soigné
+                System.out.println("Le Tamagotchi a été soigné !");
+            } else if (choix == 2) {
+                System.out.println("Le Tamagotchi n'a pas été soigné !");
+            } else {
+                System.out.println("Choix invalide !");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Choix invalide !");
+        }
+    
+        scanner.close();
+    }  
+    
     public static void main(String[] args) {
         Tamagotchi tamagotchi = new Tamagotchi();
         try (Scanner scanner = new Scanner(System.in)) {
@@ -138,8 +173,7 @@ public class Tamagotchi {
                 System.out.println("2 : Nourrir le Tamagotchi");
                 System.out.println("3 : Jouer avec le Tamagotchi");
                 System.out.println("4 : Nettoyer l'environnement du Tamagotchi");
-                System.out.println("5 : Soigner le Tamagotchi");
-                System.out.println("6 : Quitter");
+                System.out.println("5 : Quitter");
                 int choix = scanner.nextInt();
 
                 switch (choix) {
@@ -155,7 +189,7 @@ public class Tamagotchi {
                     case 4:
                         tamagotchi.clean();
                         break;
-                    case 6:
+                    case 5:
                         continuer = false;
                         break;
                     default:
