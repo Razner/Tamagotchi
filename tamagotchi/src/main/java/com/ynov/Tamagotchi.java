@@ -1,5 +1,6 @@
 package com.ynov;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Tamagotchi {
@@ -14,6 +15,7 @@ public class Tamagotchi {
     private boolean secondDayWithoutEating;
     private boolean thirdDayWithoutEating;
     private boolean dirtyEnvironment;
+    private static Scanner scanner = new Scanner(System.in);
 
     public Tamagotchi() {
         age = 0; // Âge initial
@@ -54,10 +56,6 @@ public class Tamagotchi {
                     System.out.println("Le Tamagotchi est malade.");
                     System.out.println("Il faut le soigner !");
                     heal(); // Appel de la méthode pour soigner le Tamagotchi
-                if (isSick) { // Si le Tamagotchi n'a pas été soigné
-                    state = 0; // Remise à zéro après la mort
-                    System.out.println("Le Tamagotchi est mort parce que tu l'as pas soigné(e) !");
-                }
             }
             if (age >= 20) { // Le vieillard est mort de vieillesse
                 state = 0; // Remise à zéro après la mort
@@ -138,29 +136,34 @@ public class Tamagotchi {
     }
 
     public void heal() {
-            
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Voulez-vous soigner le Tamagotchi ? (1: oui / 2: non)");
-        String choixStr = scanner.nextLine();
     
-        try {
-            int choix = Integer.parseInt(choixStr);
+        int choix;
     
-            if (choix == 1) {
-                isSick = false; // Le Tamagotchi est soigné
-                System.out.println("Le Tamagotchi a été soigné !");
-            } else if (choix == 2) {
-                System.out.println("Le Tamagotchi n'a pas été soigné !");
-            } else {
-                System.out.println("Choix invalide !");
+        while (true) {
+            try {
+                choix = scanner.nextInt();
+                scanner.nextLine(); // Lire la ligne vide après avoir lu l'entier
+    
+                if (choix == 1) {
+                    isSick = false; // Le Tamagotchi est soigné
+                    System.out.println("Le Tamagotchi a été soigné !");
+                } else if (choix == 2) {
+                    state = 0; // Remise à zéro après la mort
+                    System.out.println("Le Tamagotchi est mort parce que tu l'as pas soigné(e) !");
+                } else {
+                    System.out.println("Choix invalide !");
+                    continue;
+                }
+    
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Choix invalide ! Veuillez entrer un nombre.");
+                scanner.nextLine(); // Vider le scanner pour éviter une boucle infinie
             }
-        } catch (NumberFormatException e) {
-            System.out.println("Choix invalide !");
         }
-    
-        scanner.close();
-    }  
-    
+    }
+       
     public static void main(String[] args) {
         Tamagotchi tamagotchi = new Tamagotchi();
         try (Scanner scanner = new Scanner(System.in)) {
@@ -175,6 +178,7 @@ public class Tamagotchi {
                 System.out.println("4 : Nettoyer l'environnement du Tamagotchi");
                 System.out.println("5 : Quitter");
                 int choix = scanner.nextInt();
+                scanner.nextLine();
 
                 switch (choix) {
                     case 1:
