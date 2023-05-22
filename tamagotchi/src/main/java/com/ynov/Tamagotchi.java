@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Tamagotchi {
     private int age; // Âge en unités de temps
-    private int happiness; // Niveau de bonheur
+    int happiness; // Niveau de bonheur
     private int happinessMax; // Niveau de bonheur maximal
     private int state; // 0 = oeuf, 1 = bébé, 2 = adulte, 3 = vieillard, 4 = mort
     private int nbPlay = 0; // Nombre de fois que le joueur a joué avec le Tamagotchi durant cette unité de temps
@@ -29,7 +29,7 @@ public class Tamagotchi {
         this.isSick = false; // Le Tamagotchi a une chance sur trois d'être malade
     }
 
-    public void passerUniteDeTemps() {
+    public void UnitTime() {
         age++;
         nbPlay = 0; // On réinitialise le nombre de fois que le joueur a joué avec le Tamagotchi
         if (state == 0) { // Phase d'oeuf
@@ -182,7 +182,7 @@ public class Tamagotchi {
 
                 switch (choix) {
                     case 1:
-                        tamagotchi.passerUniteDeTemps();
+                        tamagotchi.UnitTime();
                         break;
                     case 2:
                         tamagotchi.feed();
