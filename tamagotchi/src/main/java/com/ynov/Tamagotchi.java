@@ -4,13 +4,13 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Tamagotchi {
-    private int age; // Âge en unités de temps
-    int happiness; // Niveau de bonheur
-    private int happinessMax; // Niveau de bonheur maximal
-    private int state; // 0 = oeuf, 1 = bébé, 2 = adulte, 3 = vieillard, 4 = mort
-    private int nbPlay = 0; // Nombre de fois que le joueur a joué avec le Tamagotchi durant cette unité de temps
-    private int nbEat = 0; // Nombre de fois que le joueur a nourri le Tamagotchi durant cette unité de temps
-    private boolean isSick; // Tamagotchi malade ou non
+    private int age;
+    int happiness;
+    private int happinessMax; 
+    private int state;
+    private int nbPlay = 0;
+    private int nbEat = 0; 
+    private boolean isSick; 
     private boolean firstDayWithoutEating;
     private boolean secondDayWithoutEating;
     private boolean thirdDayWithoutEating;
@@ -18,71 +18,71 @@ public class Tamagotchi {
     private static Scanner scanner = new Scanner(System.in);
 
     public Tamagotchi() {
-        age = 0; // Âge initial
-        happiness = 15; // Niveau de bonheur initial
-        happinessMax = 50; // Niveau de bonheur maximal
-        state = 0; // Le Tamagotchi commence sous forme d'oeuf
+        age = 0; 
+        happiness = 15;
+        happinessMax = 50;
+        state = 0; 
         this.firstDayWithoutEating = true;
         this.secondDayWithoutEating = true;
         this.thirdDayWithoutEating = true;
         this.dirtyEnvironment = false;
-        this.isSick = false; // Le Tamagotchi a une chance sur trois d'être malade
+        this.isSick = false; 
     }
 
     public void UnitTime() {
         age++;
-        nbPlay = 0; // On réinitialise le nombre de fois que le joueur a joué avec le Tamagotchi
-        if (state == 0) { // Phase d'oeuf
+        nbPlay = 0; 
+        if (state == 0) {
             happiness = 15;
-            if (age >= 1) { // L'oeuf a éclos
-                state = 1; // Passage à l'état de bébé
+            if (age >= 1) {
+                state = 1; 
                 System.out.println("Le Tamagotchi est né !");
                 }
-        } else if (state == 1) { // Phase de bébé
-            happiness -= 10; // Le bonheur diminue de 10 à chaque unité de temps
-            if (age >= 4 && happiness >= 40) { // Le bébé a été nourri 4 fois et est assez heureux
-                state = 2; // Passage à l'état d'adulte
+        } else if (state == 1) { 
+            happiness -= 10; 
+            if (age >= 4 && happiness >= 40) { 
+                state = 2; 
                 System.out.println("Le Tamagotchi est devenu adulte !");
             }
-        } else if (state == 2) { // Phase d'adulte
-            happiness -= 10; // Le bonheur diminue de 10 à chaque unité de temps
-            if (age >= 15) { // L'adulte est devenu vieillard
-                state = 3; // Passage à l'état de vieillard
+        } else if (state == 2) {
+            happiness -= 10; 
+            if (age >= 15) { 
+                state = 3; 
                 System.out.println("Le Tamagotchi est devenu vieux !");
             }
-        } else if (state == 3) { // Phase de vieillard
-            happiness -= 10; // Le bonheur diminue de 10 à chaque unité de temps
+        } else if (state == 3) { 
+            happiness -= 10; 
                 if (isSick == Math.random() < 1.0 / 3.0) {
                     System.out.println("Le Tamagotchi est malade.");
                     System.out.println("Il faut le soigner !");
-                    heal(); // Appel de la méthode pour soigner le Tamagotchi
+                    heal();
             }
-            if (age >= 20) { // Le vieillard est mort de vieillesse
-                state = 0; // Remise à zéro après la mort
+            if (age >= 20) {
+                state = 0; 
                 System.out.println("Le Tamagotchi est mort de vieillesse.");
             }
         }
 
-        if (nbEat == 0 && age >= 1) { // Si le Tamagotchi n'a pas été nourri depuis la dernière unité de temps et qu'il n'est plus à l'état d'oeuf
-            int pointsDeBonheurPerdus = 5; // On initialise le nombre de points de bonheur perdus à 5
+        if (nbEat == 0 && age >= 1) {
+            int pointsDeBonheurPerdus = 5; 
 
-            if (firstDayWithoutEating) { // Si c'est la première fois que le Tamagotchi ne mange pas
-                pointsDeBonheurPerdus = 5; // On lui fait perdre 5 points de bonheur
-                firstDayWithoutEating = false; // On indique que ce n'est plus la première fois qu'il ne mange pas
-            } else if (secondDayWithoutEating) { // Si c'est le deuxième jour sans manger
-                pointsDeBonheurPerdus = 10; // On lui fait perdre 10 points de bonheur
-                secondDayWithoutEating = false; // On indique que ce n'est plus le deuxième jour sans manger
-            } else if (thirdDayWithoutEating) { // Si c'est le troisième jour sans manger
-                pointsDeBonheurPerdus = 15; // On lui fait perdre 15 points de bonheur
-                thirdDayWithoutEating = false; // On indique que ce n'est plus le troisième jour sans manger
+            if (firstDayWithoutEating) {
+                pointsDeBonheurPerdus = 5; 
+                firstDayWithoutEating = false; 
+            } else if (secondDayWithoutEating) {
+                pointsDeBonheurPerdus = 10; 
+                secondDayWithoutEating = false;
+            } else if (thirdDayWithoutEating) {
+                pointsDeBonheurPerdus = 15;
+                thirdDayWithoutEating = false; 
             }
 
-            happiness -= pointsDeBonheurPerdus; // Le bonheur diminue en conséquence
+            happiness -= pointsDeBonheurPerdus; 
             System.out.println(
                     "Le Tamagotchi a perdu " + pointsDeBonheurPerdus + " points de bonheur car il n'a pas mangé.");
-        } else { // Si le Tamagotchi a mangé, on réinitialise le compteur de jours sans manger et les booléens indiquant les jours sans manger
+        } else { 
             if (dirtyEnvironment) {
-                happiness -= 3; // Ajouter 3 points de pénalité supplémentaires si l'environnement est sale
+                happiness -= 3; 
             }
             nbEat = 0;
             firstDayWithoutEating = true;
@@ -93,7 +93,7 @@ public class Tamagotchi {
         if (happiness <= 0) {
             age = 0;
             happiness = 15;
-            state = 0; // Remise à zéro car le Tamagotchi est mort
+            state = 0; 
             System.out.println("Le Tamagotchi est mort de tristesse.");
             }
     }
@@ -102,12 +102,12 @@ public class Tamagotchi {
         firstDayWithoutEating = false;
         if (nbEat < 1) {
             if (happiness + 5 <= happinessMax) {
-                happiness += 5; // On ajoute 5 points de bonheur
+                happiness += 5;
             } else {
-                happiness = happinessMax; // Le bonheur atteint le niveau maximal
+                happiness = happinessMax; 
             }
-            nbEat++; // On incrémente le nombre de fois que le joueur a nourri le Tamagotchi
-            dirtyEnvironment = true; // L'environnement devient sale après avoir mangé
+            nbEat++; 
+            dirtyEnvironment = true; 
             System.out.println("Le Tamagotchi a mangé !");
         } else if (nbEat >= 1) {
             System.out.println("Le Tamagotchi ne veut plus manger pour l'instant.");
@@ -116,22 +116,22 @@ public class Tamagotchi {
     }
     
     public void play() {
-        if (nbPlay < 3) { // On ne peut pas jouer avec un Tamagotchi mort et on ne peut jouer que 3 fois
+        if (nbPlay < 3) { 
             if (happiness + 3 <= happinessMax) {
-                happiness += 3; // On ajoute 3 points de bonheur
+                happiness += 3; 
             } else {
-                happiness = happinessMax; // Le bonheur atteint le niveau maximal
+                happiness = happinessMax; 
             }
-            nbPlay++; // On incrémente le nombre de fois que le joueur a joué avec le Tamagotchi
+            nbPlay++; 
             System.out.println("Le Tamagotchi est content !");
-        } else if (nbPlay >= 3) { // Si on a joué 3 fois ce tour-ci
+        } else if (nbPlay >= 3) {
             System.out.println("Le Tamagotchi ne veut plus jouer pour l'instant.");
             System.out.println("Vous avez joué 3 fois, vous pourrez jouer à nouveau au prochain tour.");
         }
     }    
 
     public void clean() {
-        dirtyEnvironment = false; // Marque l'environnement comme étant propre
+        dirtyEnvironment = false;
         System.out.println("L'environnement du Tamagotchi est propre.");
     }
 
@@ -143,13 +143,13 @@ public class Tamagotchi {
         while (true) {
             try {
                 choix = scanner.nextInt();
-                scanner.nextLine(); // Lire la ligne vide après avoir lu l'entier
+                scanner.nextLine(); 
     
                 if (choix == 1) {
-                    isSick = false; // Le Tamagotchi est soigné
+                    isSick = false; 
                     System.out.println("Le Tamagotchi a été soigné !");
                 } else if (choix == 2) {
-                    state = 0; // Remise à zéro après la mort
+                    state = 0; 
                     System.out.println("Le Tamagotchi est mort parce que tu l'as pas soigné(e) !");
                 } else {
                     System.out.println("Choix invalide !");
@@ -159,7 +159,7 @@ public class Tamagotchi {
                 break;
             } catch (InputMismatchException e) {
                 System.out.println("Choix invalide ! Veuillez entrer un nombre.");
-                scanner.nextLine(); // Vider le scanner pour éviter une boucle infinie
+                scanner.nextLine(); 
             }
         }
     }
